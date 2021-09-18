@@ -69,3 +69,171 @@ VALUES
     (2, 'Antonio Alexandre Theo Castro'),
     (3, 'Raquel Vitória Novaes'),
     (4, 'Benício Caio Nascimento');
+
+-- Triggers
+COMMIT;
+GO;
+CREATE TRIGGER OKL.OKL_trigger_qtd_prod
+ON OKL.OKL_PRODUTO
+AFTER INSERT, UPDATE
+AS
+DECLARE
+    @inserted_qtd INT;
+BEGIN
+    --SET @inserted_qtd = (SELECT i.QTD_ESTOQUE FROM inserted i)
+	DECLARE iterator CURSOR
+	FOR SELECT i.QTD_ESTOQUE FROM inserted i;
+	-- Abrir o cursor
+	OPEN iterator;
+	FETCH NEXT FROM iterator INTO @inserted_qtd;
+
+	WHILE @@FETCH_STATUS = 0
+	BEGIN
+	IF @inserted_qtd < 0
+    BEGIN
+        ROLLBACK;
+        RAISERROR (N'Quantidade  %d menor que 0 (zero) não permitida.', -- Message text
+        14, -- Severity
+        1, -- State
+        @inserted_qtd);
+    END;
+	FETCH NEXT FROM iterator INTO @inserted_qtd;
+	END;
+	CLOSE iterator;
+	DEALLOCATE iterator;
+END;
+
+COMMIT;
+GO;
+
+CREATE TRIGGER OKL.OKL_trigger_atualiza_estoque
+ON OKL.OKL_ITEM_PEDIDO
+AFTER INSERT
+AS
+DECLARE
+	@inserted_prod INT,
+    @inserted_qtd INT,
+	@stock INT;
+BEGIN
+	DECLARE iterator_atualiza_estoque CURSOR
+	FOR SELECT i.COD_PRODUTO, i.QTD_VENDIDA FROM inserted i;
+	-- Abrir o cursor
+	OPEN iterator_atualiza_estoque;
+	FETCH NEXT FROM iterator_atualiza_estoque INTO @inserted_prod, @inserted_qtd;
+
+	WHILE @@FETCH_STATUS = 0
+	BEGIN
+	SET @stock = (SELECT QTD_ESTOQUE FROM OKL.OKL_PRODUTO WHERE OKL.OKL_PRODUTO.COD_PRODUTO = @inserted_prod);
+	IF @inserted_qtd > @stock
+    BEGIN
+		ROLLBACK;
+        RAISERROR (N'Quantidade %d maior que quantidade de estoque %d.', -- Message text
+        14, -- Severity
+        1, -- State
+        @inserted_qtd, @stock);
+    END;
+	ELSE
+	BEGIN
+        UPDATE OKL.OKL_PRODUTO
+		SET QTD_ESTOQUE = @stock - @inserted_qtd
+		WHERE COD_PRODUTO = @inserted_prod;
+    END;
+	FETCH NEXT FROM iterator_atualiza_estoque INTO @inserted_prod, @inserted_qtd;
+	END;
+	CLOSE iterator_atualiza_estoque;
+	DEALLOCATE iterator_atualiza_estoque;
+END;
+
+COMMIT;
+GO;
+
+CREATE TRIGGER OKL.OKL_trigger_valor_venda
+ON OKL.OKL_ITEM_PEDIDO
+AFTER INSERT, UPDATE
+AS
+DECLARE
+    @cod_produto INT,
+    @inserted_valor_venda REAL,
+    @preco_base REAL,
+    @char_valor_venda VARCHAR(10),
+    @char_preco_base VARCHAR(10);
+BEGIN
+    -- SET @inserted_valor_venda = (SELECT i.VALOR_VENDA FROM inserted i);
+    DECLARE iterator_valor_venda CURSOR
+	FOR SELECT i.VALOR_VENDA, i.COD_PRODUTO FROM inserted i;
+    -- Abrir o cursor
+	OPEN iterator_valor_venda;
+	FETCH NEXT FROM iterator_valor_venda INTO @inserted_valor_venda, @cod_produto;
+
+    WHILE @@FETCH_STATUS = 0
+	BEGIN
+        SET @preco_base = (
+            SELECT PRECO_BASE FROM OKL.OKL_PRODUTO
+            WHERE COD_PRODUTO = @cod_produto
+        );
+        IF @inserted_valor_venda < @preco_base
+        BEGIN
+            ROLLBACK;
+            SET @char_valor_venda = CONVERT(varchar(10), @inserted_valor_venda); 
+            SET @char_preco_base = CONVERT(varchar(10), @preco_base);
+            RAISERROR (N'Valor de venda %s menor que preço base %s não permitido.', -- Message text
+                14, -- Severity
+                1, -- State
+                @char_valor_venda,
+                @char_preco_base
+            );
+        END;
+    	FETCH NEXT FROM iterator_valor_venda INTO @inserted_valor_venda, @cod_produto;
+    END;
+    
+	CLOSE iterator_valor_venda;
+	DEALLOCATE iterator_valor_venda;
+END;
+
+COMMIT;
+GO;
+
+CREATE TRIGGER OKL.OKL_trigger_preco_base
+ON OKL.OKL_PRODUTO
+AFTER UPDATE
+AS
+DECLARE
+    @cod_produto INT,
+    @inserted_preco_base REAL,
+    @valor_venda REAL,
+    @char_preco_base VARCHAR(10),
+    @char_valor_venda VARCHAR(10);
+BEGIN
+    -- SET @inserted_preco_base = (SELECT i.PRECO_BASE FROM inserted i);
+    DECLARE iterator_preco_base CURSOR
+	FOR SELECT i.PRECO_BASE, i.COD_PRODUTO FROM inserted i;
+    -- Abrir o cursor
+	OPEN iterator_preco_base;
+	FETCH NEXT FROM iterator_preco_base INTO @inserted_preco_base, @cod_produto;
+
+    WHILE @@FETCH_STATUS = 0
+	BEGIN
+        SET @valor_venda = (
+            SELECT VALOR_VENDA FROM OKL.OKL_ITEM_PEDIDO
+            WHERE COD_PRODUTO = @cod_produto
+        );
+        IF @valor_venda < @inserted_preco_base
+        BEGIN
+            SET @char_valor_venda = CONVERT(varchar(10), @valor_venda);
+            SET @char_preco_base = CONVERT(varchar(10), @inserted_preco_base); 
+            ROLLBACK;
+            RAISERROR (N'Valor de venda %s menor que preço base %s não permitido.', -- Message text
+                14, -- Severity
+                1, -- State
+                @char_valor_venda,
+                @char_preco_base
+            );
+        END;
+    	FETCH NEXT FROM iterator_preco_base INTO @inserted_preco_base, @cod_produto;
+    END;
+	CLOSE iterator_preco_base;
+	DEALLOCATE iterator_preco_base;
+END;
+
+COMMIT;
+GO;
