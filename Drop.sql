@@ -6,7 +6,7 @@ DROP TABLE OKL.OKL_VENDEDOR;
 DROP TABLE OKL.OKL_PEDIDO;
 
 -- Drop triggers
-DROP TRIGGER OKL.OKL_trigger1;
+DROP TRIGGER OKL.OKL_trigger_valor_venda;
 
 -- Deletar linhas em específico
 DELETE FROM OKL.OKL_PRODUTO
@@ -16,5 +16,6 @@ WHERE COD_PRODUTO = 5;
 SELECT * FROM INFORMATION_SCHEMA.TABLES
 WHERE TABLE_SCHEMA='OKL';
 
-SELECT * FROM sys.triggers;
+SELECT * FROM sys.triggers
+WHERE name LIKE 'OKL_%';
 
