@@ -57,15 +57,15 @@ VALUES
 INSERT INTO OKL.OKL_CLIENTE
 VALUES
     ('95693152618', 'Bruna Isabelle Daiane Caldeira', 'Rua OP-IX', '95985783637'),
-    ('50539992607', 'Andr®¶ Juan Ara®≤jo', 'Travessa Benjamin Constant', '79981253309'),
+    ('50539992607', 'Andr√© Juan Ara√∫jo', 'Travessa Benjamin Constant', '79981253309'),
     ('48564804808', 'Diego Matheus Barbosa', 'Rua Severino Francisco dos Santos', '83998001344'),
-    ('78379403932', 'Marlene Rayssa Gomes', 'Rua Ademar Jos®¶ Demate Filho', '47988993243'),
-    ('43032367646', 'Elaine Let®™cia Alessandra da Cunha', 'Rua Jos®¶ de Assis R®¶gis', '83992678421');
+    ('78379403932', 'Marlene Rayssa Gomes', 'Rua Ademar Jos√© Demate Filho', '47988993243'),
+    ('43032367646', 'Elaine Let√≠cia Alessandra da Cunha', 'Rua Jos√© de Assis R√©gis', '83992678421');
 
 INSERT INTO OKL.OKL_VENDEDOR
 VALUES
     (0, 'Edson Marcelo Pietro das Neves'),
-    (1, 'Fl®¢via Liz da Luz'),
+    (1, 'Fl√°via Liz da Luz'),
     (2, 'Antonio Alexandre Theo Castro'),
-    (3, 'Raquel Vit®Æria Novaes'),
-    (4, 'Ben®™cio Caio Nascimento');
+    (3, 'Raquel Vit√≥ria Novaes'),
+    (4, 'Ben√≠cio Caio Nascimento');
