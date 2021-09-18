@@ -1,5 +1,12 @@
 CREATE PROCEDURE OKL.populate AS
 BEGIN
+    -- Testa trigger 1
+    INSERT INTO OKL.OKL_PRODUTO VALUES (5, 'Um prod funcional',      9.99,   0); 
+    INSERT INTO OKL.OKL_PRODUTO VALUES (6, 'Um prod em bom estado', 14.99,  47);
+    INSERT INTO OKL.OKL_PRODUTO VALUES (7, 'Um prod quebrado',      43.23, -15); -- Quantidade negativa
+    INSERT INTO OKL.OKL_PRODUTO VALUES (8, 'Um prod estragado',     25.46,  -1); -- Quantidade negativa
+
+    -- Testa triggers 2 e 3
     INSERT
     INTO OKL.OKL_PEDIDO
     VALUES
