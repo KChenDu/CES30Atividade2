@@ -1,3 +1,4 @@
+--Criar o trigger
 CREATE TRIGGER OKL.OKL_trigger_atualiza_estoque
 ON OKL.OKL_ITEM_PEDIDO
 AFTER INSERT
@@ -26,11 +27,11 @@ BEGIN
     END;
 END;
 
--- Verificar trigger
+--Verificar trigger
 SELECT * FROM sys.triggers
 WHERE name LIKE 'OKL_%';
 
--- Visualizar tabelas
+--Visualizar tabelas
 SELECT * FROM OKL.OKL_ITEM_PEDIDO;
 SELECT * FROM OKL.OKL_PRODUTO;
 SELECT * FROM OKL.OKL_VENDEDOR;

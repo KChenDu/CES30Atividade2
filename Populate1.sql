@@ -1,11 +1,11 @@
 INSERT
 INTO OKL.OKL_PRODUTO
 VALUES
-(0, 'Um prod espetacular', 2.0, 64),
-(1, 'Um prod excelente', 3.0, 100),
+(0, 'Um prod espetacular', 2.0, 200),
+(1, 'Um prod excelente', 3.0, 200),
 (2, 'Um prod louco', 99.0, 200),
-(3, 'Um prod bom', 128.0, 3),
-(4, 'Um prod sensacional', 300000000.0, 0);
+(3, 'Um prod bom', 128.0, 10),
+(4, 'Um prod sensacional', 300000000.0, 1);
 
 INSERT INTO OKL.OKL_CLIENTE
 VALUES
