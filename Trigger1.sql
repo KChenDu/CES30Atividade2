@@ -30,21 +30,21 @@ END;
 
 
 
--- Verificar trigger
-SELECT * FROM sys.triggers
-WHERE name LIKE 'OKL_%';
+-- -- Verificar trigger
+-- SELECT * FROM sys.triggers
+-- WHERE name LIKE 'OKL_%';
 
--- Testa trigger insert
-INSERT INTO OKL.OKL_PRODUTO
-VALUES (7, 'Um prod funcional', 10.0, 6),
-(8, 'Um prod estragado', 10.0, -2);
+-- -- Testa trigger insert
+-- INSERT INTO OKL.OKL_PRODUTO
+-- VALUES (7, 'Um prod funcional', 10.0, 6),
+-- (8, 'Um prod estragado', 10.0, -2);
 
-SELECT * FROM OKL.OKL_PRODUTO;
+-- SELECT * FROM OKL.OKL_PRODUTO;
 
--- Testa trigger update
-UPDATE OKL.OKL_PRODUTO
-SET QTD_ESTOQUE = -10
-WHERE COD_PRODUTO = 3;
+-- -- Testa trigger update
+-- UPDATE OKL.OKL_PRODUTO
+-- SET QTD_ESTOQUE = -10
+-- WHERE COD_PRODUTO = 3;
 
-SELECT * FROM OKL.OKL_PRODUTO;
+-- SELECT * FROM OKL.OKL_PRODUTO;
 

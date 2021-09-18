@@ -37,38 +37,38 @@ BEGIN
 	DEALLOCATE iterator_atualiza_estoque;
 END;
 
---Verificar trigger
-SELECT * FROM sys.triggers
-WHERE name LIKE 'OKL_%';
+-- --Verificar trigger
+-- SELECT * FROM sys.triggers
+-- WHERE name LIKE 'OKL_%';
 
---Visualizar tabelas
-SELECT * FROM OKL.OKL_ITEM_PEDIDO;
-SELECT * FROM OKL.OKL_PRODUTO;
-SELECT * FROM OKL.OKL_VENDEDOR;
+-- --Visualizar tabelas
+-- SELECT * FROM OKL.OKL_ITEM_PEDIDO;
+-- SELECT * FROM OKL.OKL_PRODUTO;
+-- SELECT * FROM OKL.OKL_VENDEDOR;
 
--- Testa trigger insert PEDIDO
-INSERT INTO OKL.OKL_PEDIDO(NUMERO_PEDIDO, CPF)
-VALUES (0, '43032367646');
-SELECT NUMERO_PEDIDO, CPF FROM OKL.OKL_PEDIDO;
+-- -- Testa trigger insert PEDIDO
+-- INSERT INTO OKL.OKL_PEDIDO(NUMERO_PEDIDO, CPF)
+-- VALUES (0, '43032367646');
+-- SELECT NUMERO_PEDIDO, CPF FROM OKL.OKL_PEDIDO;
 
--- Testa trigger insert(instancia errada)
-INSERT INTO OKL.OKL_ITEM_PEDIDO
-VALUES(13, 0, 2, 500, 500.0, 1);
---(12, 0, 2, 5, 500.0, 1);
+-- -- Testa trigger insert(instancia errada)
+-- INSERT INTO OKL.OKL_ITEM_PEDIDO
+-- VALUES(13, 0, 2, 500, 500.0, 1);
+-- --(12, 0, 2, 5, 500.0, 1);
 
--- Testa trigger insert(instancia correta)
-INSERT INTO OKL.OKL_ITEM_PEDIDO
-VALUES(14, 0, 2, 2, 500.0, 1),
-(15, 0, 2, 2, 500.0, 1);
+-- -- Testa trigger insert(instancia correta)
+-- INSERT INTO OKL.OKL_ITEM_PEDIDO
+-- VALUES(523, 0, 2, 2, 500.0, 1),
+-- (554746, 0, 2, 2, 500.0, 1);
 
-SELECT * FROM OKL.OKL_PRODUTO;
-SELECT * FROM OKL.OKL_PEDIDO;
-SELECT * FROM OKL.OKL_ITEM_PEDIDO;
+-- SELECT * FROM OKL.OKL_PRODUTO;
+-- SELECT * FROM OKL.OKL_PEDIDO;
+-- SELECT * FROM OKL.OKL_ITEM_PEDIDO;
 
---DELETA ITEM_PEDIDO
-DELETE
-FROM OKL.OKL_ITEM_PEDIDO
-WHERE NUMERO_ITEM = 10
+-- --DELETA ITEM_PEDIDO
+-- DELETE
+-- FROM OKL.OKL_ITEM_PEDIDO
+-- WHERE NUMERO_ITEM = 10
 
---DROPS UTILS
-DROP TRIGGER OKL.OKL_trigger_atualiza_estoque
+-- --DROPS UTILS
+-- DROP TRIGGER OKL.OKL_trigger_atualiza_estoque

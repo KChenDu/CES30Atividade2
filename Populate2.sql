@@ -16,8 +16,8 @@ BEGIN
     INSERT INTO OKL.OKL_ITEM_PEDIDO VALUES (4, 1,  4, 0,    600000000.0, 4);
     INSERT INTO OKL.OKL_ITEM_PEDIDO VALUES (5, 3,  0, 270,  5.0,         1); -- Compra mais que o estoque
     INSERT INTO OKL.OKL_ITEM_PEDIDO VALUES (6, 3,  1, 293,  7.0,         4); -- Compra mais que o estoque
-    INSERT INTO OKL.OKL_ITEM_PEDIDO VALUES (7, 4,  2, 150,  123.0,       0); -- Compra mais que o estoque
-    INSERT INTO OKL.OKL_ITEM_PEDIDO VALUES (8, 4,  3, 20,    177.0,      2); -- Compra mais que o estoque
+    INSERT INTO OKL.OKL_ITEM_PEDIDO VALUES (7, 4,  2, 250,  123.0,       0); -- Compra mais que o estoque
+    INSERT INTO OKL.OKL_ITEM_PEDIDO VALUES (8, 4,  3, 20,   177.0,       2); -- Compra mais que o estoque
     INSERT INTO OKL.OKL_ITEM_PEDIDO VALUES (9, 4,  4, 3,    400000000.0, 1); -- Compra mais que o estoque
     INSERT INTO OKL.OKL_ITEM_PEDIDO VALUES (10, 1, 0, 4,    1.0,         4); -- Valor venda menor que preço base
     INSERT INTO OKL.OKL_ITEM_PEDIDO VALUES (11, 2, 1, 7,    2.99,        0); -- Valor venda menor que preço base
@@ -32,3 +32,8 @@ BEGIN EXEC OKL.populate end;
 SELECT * FROM OKL.OKL_CLIENTE;
 SELECT * FROM OKL.OKL_PEDIDO;
 SELECT * FROM OKL.OKL_ITEM_PEDIDO;
+
+SELECT ip.COD_PRODUTO, VALOR_VENDA, PRECO_BASE
+FROM OKL.OKL_ITEM_PEDIDO ip
+INNER JOIN OKL.OKL_PRODUTO p
+ON p.COD_PRODUTO = ip.COD_PRODUTO;
