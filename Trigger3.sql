@@ -42,7 +42,7 @@ BEGIN
 END;
 GO;
 
-CREATE TRIGGER OKL.OKL_trigger_preco_base
+ALTER TRIGGER OKL.OKL_trigger_preco_base
 ON OKL.OKL_PRODUTO
 AFTER UPDATE
 AS
@@ -62,15 +62,15 @@ BEGIN
 
     WHILE @@FETCH_STATUS = 0
 	BEGIN
-        SET @valor_venda = (
-            SELECT VALOR_VENDA FROM OKL.OKL_ITEM_PEDIDO
-            WHERE COD_PRODUTO = @cod_produto
-        );
-        IF @valor_venda < @inserted_preco_base
+        IF NOT (@inserted_preco_base < ALL (
+                SELECT VALOR_VENDA FROM OKL.OKL_ITEM_PEDIDO
+                WHERE COD_PRODUTO = @cod_produto)
+            )
+
         BEGIN
-            SET @char_valor_venda = CONVERT(varchar(10), @valor_venda);
-            SET @char_preco_base = CONVERT(varchar(10), @inserted_preco_base); 
             ROLLBACK;
+            SET @char_preco_base = CONVERT(varchar(10), @inserted_preco_base);
+            SET @char_valor_venda = CONVERT(varchar(10), @valor_venda);
             RAISERROR (N'Valor de venda %s menor que preço base %s não permitido.', -- Message text
                 14, -- Severity
                 1, -- State
@@ -139,10 +139,24 @@ ON p.COD_PRODUTO = ip.COD_PRODUTO;
 -- Testa trigger update PRODUTO (válido)
 UPDATE OKL.OKL_PRODUTO
 SET PRECO_BASE = 1.0
-WHERE COD_PRODUTO = 1;
+WHERE COD_PRODUTO = 1
+UPDATE OKL.OKL_PRODUTO
+SET PRECO_BASE = 0.5
+WHERE COD_PRODUTO = 2
+;
+
+UPDATE OKL.OKL_PRODUTO
+SET QTD_ESTOQUE = 100
+WHERE COD_PRODUTO = 1
+UPDATE OKL.OKL_PRODUTO
+SET QTD_ESTOQUE = 300
+WHERE COD_PRODUTO = 2
+;
 
 SELECT ip.COD_PRODUTO, VALOR_VENDA, PRECO_BASE
 FROM OKL.OKL_ITEM_PEDIDO ip
 INNER JOIN OKL.OKL_PRODUTO p
 ON p.COD_PRODUTO = ip.COD_PRODUTO;
+
+SELECT * FROM OKL.OKL_PRODUTO
 

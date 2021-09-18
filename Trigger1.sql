@@ -1,4 +1,4 @@
-CREATE TRIGGER OKL.OKL_trigger1
+CREATE TRIGGER OKL.OKL_trigger_qtd_prod
 ON OKL.OKL_PRODUTO
 AFTER INSERT, UPDATE
 AS
@@ -27,6 +27,8 @@ BEGIN
 	CLOSE iterator;
 	DEALLOCATE iterator;
 END;
+
+
 
 -- Verificar trigger
 SELECT * FROM sys.triggers
